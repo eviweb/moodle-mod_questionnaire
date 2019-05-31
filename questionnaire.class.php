@@ -552,7 +552,7 @@ class questionnaire {
         }
         $numresp = $this->count_submissions();
         if ($usernumresp === null) {
-            $usernumresp = $questionnaire->count_submissions($USER->id);
+            $usernumresp = $this->count_submissions($USER->id);
         }
 
         // Number of Responses in currently selected group (or all participants etc.).
@@ -3739,10 +3739,11 @@ class questionnaire {
             }
         }
         $usergraph = get_config('questionnaire', 'usergraph');
+        $allscore = $this->can_view_all_responses() ? array_values($allscorepercent) : [];
         if ($usergraph && $this->survey->chart_type) {
             $this->page->add_to_page('feedbackcharts',
                 draw_chart($feedbacktype = 'sections', $this->survey->chart_type, array_values($chartlabels),
-                array_values($scorepercent), array_values($allscorepercent), $sectionlabel, $groupname, $allresponses));
+                array_values($scorepercent), $allscore, $sectionlabel, $groupname, $allresponses));
         }
         if ($this->survey->feedbackscores) {
             $this->page->add_to_page('feedbackscores', html_writer::table($table));
